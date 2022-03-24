@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
+from pathlib import Path
 import os
 
 from flask import Flask
 from flask_restx import Resource, Api
+
 from werkzeug.datastructures import FileStorage
+from werkzeug.exceptions import BadRequest
 from werkzeug.utils import secure_filename as secureFilename
 
 ALLOWED_EXTENSIONS = [ "png", "jpg", "jpeg" ]
@@ -32,6 +35,7 @@ class HelloWorld(Resource):
 @api.route("/cam/<camName>")
 class Webcam(Resource):
     @api.expect(uploadParser)
+    @api.doc(responses={200: "Image successfully uploaded", 400: "Bad request"})
     def post(self, camName: str):
         """Upload a webcam image
         
@@ -39,13 +43,16 @@ class Webcam(Resource):
         ----------
         camName: The webcam name.
         """
+        camName = secureFilename(camName)
         args = uploadParser.parse_args()
         image = args["image"]
         if not isAllowedFilename(image.filename):
-            return "Bad filename", 500
+            raise BadRequest("Bad filename")
         # TODO f-string after moving from Python3.5
-        filename = secureFilename("{}-{}".format(camName, image.filename))
-        image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        filename = secureFilename(image.filename)
+        pathName = app.config["UPLOAD_FOLDER"] + camName
+        Path(pathName).mkdir(parents=True, exist_ok=True)
+        image.save(os.path.join(pathName, filename))
         return {"message": "Successfully uploaded as {}".format(filename)}, 200
 
     def get(self, camName: str):
