@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
+import glob
 from pathlib import Path
 import os
 
-from flask import Flask
+from flask import Flask, send_file as sendFile
 from flask_restx import Resource, Api
 
 from werkzeug.datastructures import FileStorage
-from werkzeug.exceptions import BadRequest
+from werkzeug.exceptions import BadRequest, NotFound
 from werkzeug.utils import secure_filename as secureFilename
 
 ALLOWED_EXTENSIONS = [ "png", "jpg", "jpeg" ]
@@ -55,6 +56,7 @@ class Webcam(Resource):
         image.save(os.path.join(pathName, filename))
         return {"message": "Successfully uploaded as {}".format(filename)}, 200
 
+    @api.doc(responses={200: "Camera found", 404: "Camera not found"})
     def get(self, camName: str):
         """Get the latest webcam image
 
@@ -62,7 +64,13 @@ class Webcam(Resource):
         ----------
         camName: The webcam name.
         """
-        pass
+
+        camName = secureFilename(camName)
+        listOfFiles = glob.glob(app.config["UPLOAD_FOLDER"] + "{}/*".format(camName))
+        if listOfFiles:
+            latestFile = max(listOfFiles, key=os.path.getctime)
+            return sendFile(latestFile)
+        raise NotFound("Camera not found")
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
