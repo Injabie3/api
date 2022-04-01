@@ -31,4 +31,9 @@ def test_hello(client):
     assert "hello" in response.json
     assert response.json["hello"] == "world"
 
+def test_get_webcam_non_existent(client):
+    response = client.get("/cam/someNonExistentCamera")
+    assert response.status_code == 404
+    assert "message" in response.json
+    assert "Camera not found" in response.json["message"]
 
