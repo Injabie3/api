@@ -3,7 +3,7 @@ from setuptools import find_packages, setup
 setup(
     name="injabie3-api",
     version="0.0.1",
-    packages=find_packages(),
+    packages=["injabie3api"],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
