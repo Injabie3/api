@@ -3,7 +3,7 @@ import glob
 from pathlib import Path
 import os
 
-from flask import Flask, send_file as sendFile
+from flask import Flask, current_app as currentApp, send_file as sendFile
 from flask_restx import Api, Resource, Namespace
 
 from werkzeug.datastructures import FileStorage
@@ -54,7 +54,7 @@ class Webcam(Resource):
 
         camName = secureFilename(camName)
         listOfFiles = glob.glob(
-                app.config["UPLOAD_FOLDER"] + "{}/*".format(camName))
+                currentApp.config["UPLOAD_FOLDER"] + "{}/*".format(camName))
         if listOfFiles:
             latestFile = max(listOfFiles, key=os.path.getctime)
             return sendFile(latestFile)
