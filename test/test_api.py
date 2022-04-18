@@ -50,3 +50,11 @@ def test_get_webcam_existent(client):
     latestFile = max(listOfFiles, key=os.path.getctime)
     fileSize = os.path.getsize(latestFile)
     assert fileSize == len(response.data)
+
+def testPostWebcamWithGoodArguments(client):
+    fileToUpload=f"{DIR_PATH}/meirochou.jpg"
+    response = client.post(
+        "/cam/aCameraThatExists",
+        data=dict(image=open(fileToUpload,"rb",))
+    )
+    assert response.status_code == 200

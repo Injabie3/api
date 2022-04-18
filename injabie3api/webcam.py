@@ -10,8 +10,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, NotFound
 from werkzeug.utils import secure_filename as secureFilename
 
-ALLOWED_EXTENSIONS = [ "png", "jpg", "jpeg" ]
-UPLOAD_FOLDER = "/home/pi/git/webcam/webcam/images/"
+from .utils import isAllowedFilename
 
 api = Namespace("webcam", description="Webcam related operations") 
 
@@ -38,7 +37,7 @@ class Webcam(Resource):
             raise BadRequest("Bad filename")
         # TODO f-string after moving from Python3.5
         filename = secureFilename(image.filename)
-        pathName = app.config["UPLOAD_FOLDER"] + camName
+        pathName = currentApp.config["UPLOAD_FOLDER"] + camName
         Path(pathName).mkdir(parents=True, exist_ok=True)
         image.save(os.path.join(pathName, filename))
         return {"message": "Successfully uploaded as {}".format(filename)}, 200

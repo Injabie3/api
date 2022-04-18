@@ -10,10 +10,8 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.exceptions import BadRequest, NotFound
 from werkzeug.utils import secure_filename as secureFilename
 
+from .constants import UPLOAD_FOLDER
 from .webcam import api as webcamNamespace
-
-ALLOWED_EXTENSIONS = [ "png", "jpg", "jpeg" ]
-UPLOAD_FOLDER = "/home/pi/git/webcam/webcam/images/"
 
 def createApp(testConfig=None):
     app = Flask(__name__)
