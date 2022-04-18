@@ -32,18 +32,18 @@ def client(app):
 def runner(app):
     return app.test_cli_runner()
 
-def test_hello(client):
+def testGetHello(client):
     response = client.get("/hello")
     assert "hello" in response.json
     assert response.json["hello"] == "world"
 
-def test_get_webcam_non_existent(client):
+def testGetWebcamNonExistent(client):
     response = client.get("/cam/someNonExistentCamera")
     assert response.status_code == 404
     assert "message" in response.json
     assert "Camera not found" in response.json["message"]
 
-def test_get_webcam_existent(client):
+def testGetWebcamExistent(client):
     response = client.get("/cam/aCameraThatExists")
     assert response.status_code == 200
     listOfFiles = glob.glob(f"{DIR_PATH}/cam/aCameraThatExists/*")
