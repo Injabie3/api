@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-import glob
-from pathlib import Path
-import os
-
 from flask import Flask, send_file as sendFile
 from flask_restx import Api
 
