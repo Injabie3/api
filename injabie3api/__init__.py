@@ -9,9 +9,11 @@ from werkzeug.utils import secure_filename as secureFilename
 from .constants import UPLOAD_FOLDER
 from .webcam import api as webcamNamespace
 from .helloworld import api as helloWorldNamespace
+from .system import bp as systemBlueprint
 
 def createApp(testConfig=None):
     app = Flask(__name__)
+    app.register_blueprint(systemBlueprint, url_prefix="/system")
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
     api = Api(app)
 
