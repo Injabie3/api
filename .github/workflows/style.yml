@@ -1,4 +1,4 @@
-name: Run linter
+name: Run black style check
 
 on:
   push:
@@ -22,9 +22,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install black
         # if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Run black linter on source code
+    - name: Run black on source code
       run: |
-        black --diff injabie3api/
-    - name: Run black linter on test code
+        black --check injabie3api/
+    - name: Run black on test code
       run: |
-        black --diff test/
+        black --check test/
