@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename as secureFilename
 
 from .utils import isAllowedFilename
 
-api = Namespace("webcam", description="Webcam related operations")
+api = Namespace("Webcam", description="Webcam-related operations")
 
 uploadParser = api.parser()
 uploadParser.add_argument(
