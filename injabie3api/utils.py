@@ -1,5 +1,5 @@
-
 from .constants import ALLOWED_EXTENSIONS
+
 
 def isAllowedFilename(filename):
     dotInName = "." in filename

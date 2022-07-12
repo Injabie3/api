@@ -11,10 +11,11 @@ from .webcam import api as webcamNamespace
 from .helloworld import api as helloWorldNamespace
 from .system import bp as systemBlueprint
 
+
 def createApp(testConfig=None):
     app = Flask(__name__)
     app.register_blueprint(systemBlueprint, url_prefix="/system")
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+    app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
     api = Api(app)
 
     api.add_namespace(helloWorldNamespace, path="/hello")
@@ -22,8 +23,10 @@ def createApp(testConfig=None):
 
     return app
 
+
 def create_app(test_config=None):
     return createApp(testConfig=test_config)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

@@ -1,4 +1,3 @@
-
 import glob
 from pathlib import Path
 import os
@@ -12,12 +11,17 @@ from werkzeug.utils import secure_filename as secureFilename
 
 from .utils import isAllowedFilename
 
-api = Namespace("webcam", description="Webcam related operations") 
+api = Namespace("webcam", description="Webcam related operations")
 
 uploadParser = api.parser()
-uploadParser.add_argument('image', location='files',
-                                   type=FileStorage, required=True,
-                                   help="The image to upload.")
+uploadParser.add_argument(
+    "image",
+    location="files",
+    type=FileStorage,
+    required=True,
+    help="The image to upload.",
+)
+
 
 @api.route("/<camName>")
 class Webcam(Resource):
@@ -53,7 +57,8 @@ class Webcam(Resource):
 
         camName = secureFilename(camName)
         listOfFiles = glob.glob(
-                currentApp.config["UPLOAD_FOLDER"] + "{}/*".format(camName))
+            currentApp.config["UPLOAD_FOLDER"] + "{}/*".format(camName)
+        )
         if listOfFiles:
             latestFile = max(listOfFiles, key=os.path.getctime)
             return sendFile(latestFile)
