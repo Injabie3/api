@@ -9,17 +9,17 @@ from werkzeug.utils import secure_filename as secureFilename
 from .constants import UPLOAD_FOLDER
 from .webcam import api as webcamNamespace
 from .helloworld import api as helloWorldNamespace
-from .system import bp as systemBlueprint
+from .system import addSystemNamespacesToApi
 
 
 def createApp(testConfig=None):
     app = Flask(__name__)
-    app.register_blueprint(systemBlueprint, url_prefix="/system")
     app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
     api = Api(app)
 
-    api.add_namespace(helloWorldNamespace, path="/hello")
     api.add_namespace(webcamNamespace, path="/cam")
+    api.add_namespace(helloWorldNamespace, path="/hello")
+    addSystemNamespacesToApi(api)
 
     return app
 
